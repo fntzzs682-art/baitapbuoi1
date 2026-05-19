@@ -1,0 +1,80 @@
+@page
+@model NewsApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "VnExpress - Báo tiếng Việt nhiều người xem nhất";
+}
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-home" title="Trang chủ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+        </a>
+        <div class="nav-divider"></div>
+        @foreach (var item in Model.NavItems)
+        {
+            <a href="#" class="nav-item">@item</a>
+        }
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <!-- Featured Article -->
+    <section class="featured-article">
+        <div class="featured-image">
+            <img src="@Model.FeaturedArticle.ImageUrl"
+                 alt="@Model.FeaturedArticle.Title"
+                 onerror="this.src='https://i1-vnexpress.vnecdn.net/2026/05/19/Screenshot-2026-05-12-at-23-17-6738-1316-1779160992.webp?w=680&h=0&q=100&dpr=2&fit=crop&s=B3_7es1fGPCmwGLgjwSQWA'" />
+        </div>
+        <div class="featured-content">
+            <h1 class="featured-title">@Model.FeaturedArticle.Title</h1>
+            <p class="featured-summary">@Model.FeaturedArticle.Summary</p>
+            <span class="time-ago">@Model.FeaturedArticle.TimeAgo</span>
+        </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- Secondary Articles -->
+    <section class="secondary-articles">
+        @{
+            var imageArticles = Model.SecondaryArticles.Where(a => !a.IsOpinion).ToList();
+            var opinionArticle = Model.SecondaryArticles.FirstOrDefault(a => a.IsOpinion);
+        }
+
+        @foreach (var article in imageArticles)
+        {
+            <div class="secondary-card">
+                <h2 class="secondary-title">@article.Title</h2>
+                <div class="secondary-image">
+                    <img src="@article.ImageUrl"
+                         alt="@article.Title"
+                         onerror="this.src='https://placehold.co/400x260/cccccc/666666?text=News+Image'" />
+                </div>
+            </div>
+        }
+
+        @if (opinionArticle != null)
+        {
+            <div class="opinion-card">
+                <div class="opinion-category">@opinionArticle.Category</div>
+                <h2 class="opinion-title">@opinionArticle.Title</h2>
+                <p class="opinion-summary">@opinionArticle.Summary</p>
+                <div class="opinion-meta">
+                    <span class="opinion-author">@opinionArticle.Author</span>
+                    <span class="opinion-comments">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                        @opinionArticle.CommentCount
+                    </span>
+                </div>
+            </div>
+        }
+    </section>
+
+</main>
